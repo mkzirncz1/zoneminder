@@ -101,11 +101,19 @@ if ( canView('Events') ) {
     if ( $exportFile = exportEvents(
       $exportIds,
       (isset($_REQUEST['connkey'])?$_REQUEST['connkey']:''),
-      false,false, false,
-      $exportVideo, false, $exportFormat, $exportStructure ) )
-      ajaxResponse(array('exportFile'=>$exportFile));
-    else
+      false,#detail
+      false,#frames
+      false,#images
+      $exportVideo,
+      false,#Misc
+      $exportFormat,
+      false#,#Compress
+      #$exportStructure
+    ) ) {
+      ajaxResponse(array('exportFile'=>$exportFile,'exportFormat'=>$exportFormat, 'connkey'=>(isset($_REQUEST['connkey'])?$_REQUEST['connkey']:'')));
+    } else {
       ajaxError('Export Failed');
+    }
     break;
   }
 } // end if canView('Events')
@@ -147,5 +155,5 @@ if ( canEdit('Events') ) {
   } // end switch action
 } // end if canEdit('Events')
 
-ajaxError('Unrecognised action or insufficient permissions');
+ajaxError('Unrecognised action '.$_REQUEST['action'].' or insufficient permissions for user ' . $user['Username']);
 ?>
